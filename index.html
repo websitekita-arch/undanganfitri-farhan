@@ -266,6 +266,268 @@
         .bank-logo { font-size: 1.2rem; font-weight: 800; color: #1a3322; margin-bottom: 5px; }
         .account-number { font-size: 1.15rem; font-weight: 700; margin-bottom: 3px; }
         .account-name { font-size: 0.75rem; color: #666666; text-transform: uppercase; margin-bottom: 10px; }
+        .btn-c* {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #1a3322;
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden; /* Mengunci scroll utama browser agar snap scroll berfungsi */
+        }
+
+        /* Container utama: Tetap full screen tapi dikunci agar tidak offset */
+        .invitation-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            overflow: hidden; 
+        }
+
+        /* Fitur Utama: Mengaktifkan Scroll Snap (Geser Nempel per Halaman) */
+        .invitation-container.unlocked {
+            overflow-y: scroll;
+            scroll-behavior: smooth;
+            scroll-snap-type: y mandatory; /* Memaksa scroll nempel secara vertikal */
+            height: 100vh;
+        }
+
+        .invitation-container::-webkit-scrollbar {
+            display: none; /* Menyembunyikan bar scroll agar estetik */
+        }
+
+        /* ==================== HALAMAN 1: COVER (PAS DI LAYAR & BISA DIKLIK) ==================== */
+        .page-cover {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%; 
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; 
+            align-items: center;
+            text-align: center;
+            padding: 40px 20px; /* Dikurangi agar konten tidak terdorong ke bawah layar */
+            z-index: 20;
+            background: url('https://images.unsplash.com/photo-1523438885200-e635ba2c371e?q=80&w=1000') no-repeat center center;
+            background-size: cover;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            box-sizing: border-box;
+        }
+
+        /* Menambahkan lapisan gelap tipis di cover agar tulisan putihnya terbaca jelas */
+        .page-cover::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.2); 
+            z-index: 1;
+        }
+
+        /* Memastikan konten teks berada di atas lapisan gelap */
+        .page-cover .content {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            margin-top: auto;   
+            margin-bottom: auto;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        .header-title {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: #ffffff;
+            font-weight: 600;
+            margin-bottom: 25px;
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
+        }
+
+        .couple-name {
+            font-family: 'Pinyon Script', cursive;
+            font-size: 3.5rem;
+            color: #ffffff;
+            line-height: 1.2;
+            margin: 5px 0;
+            text-shadow: 1px 2px 5px rgba(26, 51, 34, 0.5);
+        }
+
+        .ampersand {
+            font-size: 1.8rem;
+            color: #ffffff;
+            margin: 5px 0;
+            font-weight: 300;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Memastikan tombol berada di atas lapisan gelap dan merespon klik */
+        .page-cover .bottom-section {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            margin-top: auto; 
+            margin-bottom: 15px; 
+        }
+
+        .guest-box {
+            width: 85%;
+            background: rgba(26, 51, 34, 0.75); 
+            backdrop-filter: blur(4px); 
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .guest-to {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #e0eee0;
+            margin-bottom: 5px;
+        }
+
+        .guest-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .btn-open {
+            display: inline-block;
+            width: 85%;
+            background-color: #1a3322; 
+            color: #ffffff;
+            padding: 14px 0;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .music-control-btn {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 44px;
+            height: 44px;
+            background: rgba(26, 51, 34, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            color: white;
+            display: none; 
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 999;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            font-size: 1.1rem;
+        }
+
+        .music-control-btn.playing {
+            animation: spin 4s linear infinite;
+        }
+
+        /* ==================== WRAPPER ISI HALAMAN (FULL SCREEN) ==================== */
+        .main-pages {
+            display: none;
+            width: 100%;
+            height: 100%;
+        }
+
+        .main-pages.show {
+            display: block;
+        }
+
+        /* Setiap halaman dikunci berukuran pas 1 layar penuh */
+        .scroll-page {
+            width: 100%;
+            height: 100vh; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 25px;
+            position: relative;
+            scroll-snap-align: start; /* Titik pengunci halaman saat di-scroll */
+            scroll-snap-stop: always; /* Harus berhenti di tiap halaman */
+            background: url('https://images.unsplash.com/photo-1523438885200-e635ba2c371e?q=80&w=1000') no-repeat center center;
+            background-size: cover;
+        }
+
+        /* Overlay gelap transparan di setiap section agar tulisan mudah dibaca */
+        .scroll-page::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.55);
+            z-index: 1;
+        }
+
+        .scroll-page > div {
+            position: relative;
+            z-index: 2; /* Menaruh konten di atas lapisan gelap */
+            width: 100%;
+        }
+
+        .animate-fade-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .animate-fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ==================== KONTEN SPESIFIK DETAIL UNDANGAN ==================== */
+        .quran-intro { font-size: 0.75rem; font-weight: 600; letter-spacing: 2px; color: #ffffff; line-height: 1.8; margin-bottom: 20px; }
+        .quran-text { font-size: 0.85rem; font-weight: 400; line-height: 1.8; color: #ffffff; margin-bottom: 25px; }
+        .quran-surah { font-size: 0.8rem; font-weight: 700; letter-spacing: 3px; color: #ffffff; border-bottom: 1px solid rgba(255, 255, 255, 0.5); padding-bottom: 5px; display: inline-block; }
+        .scroll-hint { position: absolute; bottom: 25px; color: rgba(255,255,255,0.7); font-size: 0.7rem; letter-spacing: 2px; animation: bounce 2s infinite; z-index: 2; width: 100%; left: 0; text-align: center; }
+        
+        .salam { font-size: 1.1rem; font-weight: 600; letter-spacing: 2px; color: #ffffff; margin-bottom: 15px; }
+        .opening-text { font-size: 0.8rem; line-height: 1.6; color: #ffffff; margin-bottom: 30px; }
+        .profile-name { font-size: 1.3rem; font-weight: 700; color: #ffffff; letter-spacing: 1px; margin-bottom: 6px; }
+        .parent-info { font-size: 0.8rem; color: #e0eee0; line-height: 1.5; }
+        .parent-label { font-style: italic; font-size: 0.75rem; color: #ffffff; margin-bottom: 3px; display: block; }
+        .ampersand-divider { font-family: 'Pinyon Script', cursive; font-size: 2.5rem; color: #ffffff; margin: 15px 0; }
+
+        .section-title { font-size: 1.2rem; font-weight: 600; letter-spacing: 4px; color: #ffffff; margin-bottom: 25px; text-transform: uppercase; border-bottom: 2px solid rgba(255,255,255,0.3); padding-bottom: 8px; width: 80%; margin: 0 auto 25px auto; }
+        
+        .countdown-container { display: flex; width: 100%; margin: 0 auto 20px auto; background: rgba(26, 51, 34, 0.75); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 12px; padding: 12px 5px; backdrop-filter: blur(4px); }
+        .countdown-box { flex: 1; text-align: center; }
+        .countdown-number { font-size: 1.3rem; font-weight: 700; color: #ffffff; display: block; }
+        .countdown-label { font-size: 0.6rem; color: #e0eee0; text-transform: uppercase; display: block; }
+
+        .event-card { width: 100%; background: rgba(26, 51, 34, 0.65); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 12px; padding: 15px 15px; margin-bottom: 15px; text-align: center; }
+        .event-type { font-size: 0.95rem; font-weight: 700; letter-spacing: 2px; color: #ffffff; margin-bottom: 3px; text-transform: uppercase; }
+        .event-mempelai { font-size: 0.7rem; letter-spacing: 1px; color: #e0eee0; text-transform: uppercase; margin-bottom: 8px; display: block; }
+        .event-date { font-size: 0.85rem; font-weight: 600; color: #ffffff; margin-bottom: 5px; }
+        .event-address { font-size: 0.75rem; line-height: 1.5; color: #ffffff; margin-bottom: 10px; }
+        .btn-maps { display: inline-flex; align-items: center; justify-content: center; background-color: transparent; color: #ffffff; padding: 6px 16px; border-radius: 20px; text-decoration: none; font-size: 0.7rem; border: 1px solid #ffffff; transition: all 0.3s ease; }
+        .btn-maps:hover { background-color: #ffffff; color: #1a3322; }
+
+        .gift-intro { font-size: 0.8rem; line-height: 1.6; color: #ffffff; margin-bottom: 20px; }
+        .gift-card { width: 100%; background: rgba(255, 255, 255, 0.95); border-radius: 12px; padding: 15px; margin-bottom: 15px; color: #1a3322; }
+        .bank-logo { font-size: 1.2rem; font-weight: 800; color: #1a3322; margin-bottom: 5px; }
+        .account-number { font-size: 1.15rem; font-weight: 700; margin-bottom: 3px; }
+        .account-name { font-size: 0.75rem; color: #666666; text-transform: uppercase; margin-bottom: 10px; }
         .btn-copy { background-color: #1a3322; color: #ffffff; border: none; padding: 6px 20px; font-size: 0.7rem; font-weight: 600; border-radius: 20px; cursor: pointer; }
 
         .wishes-container { width: 100%; background: rgba(26, 51, 34, 0.75); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 12px; padding: 15px; text-align: left; }
@@ -283,6 +545,7 @@
         .happy-family-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 3px; color: #e0eee0; margin-bottom: 10px; }
         .closing-couple-name { font-family: 'Pinyon Script', cursive; font-size: 3rem; color: #ffffff; line-height: 1.2; }
 
+        /* Kumpulan Animasi */
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-8px); } 60% { transform: translateY(-4px); } }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
